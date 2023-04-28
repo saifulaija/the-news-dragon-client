@@ -1,12 +1,41 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../../providers/AuthProvider';
 
 const Register = () => {
+
+  const {createUser} = useContext(AuthContext);
+
+  const [accepted, setAccepted]=useState(false);
+
+  const handleRegister = event =>{
+    event.preventDefault();
+    const form = event.target;
+    const name = form.name.value;
+    const photo = form.photo.value;
+    const email = form.email.value;
+    const password = form.password.value;
+    console.log(name, photo, email, password);
+    createUser(email, password)
+    .then(result=>{
+      const currentUser = result.user;
+      console.log(currentUser);
+    })
+    .catch(error=>{
+      console.log(error);
+    })
+  }
+
+  const handleAccept = event=>{
+    setAccepted(event.target.checked);
+  }
+
+
     return (
         <Container className="w-50 mx-auto my-5 p-5 rounded shadow-lg">
       <h3>Please Register Now</h3>
-      
+      <Form onSubmit={handleRegister}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Your Name</Form.Label>
           <Form.Control
@@ -26,7 +55,7 @@ const Register = () => {
             required
           />
         </Form.Group>
-        <Form>
+       
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control
@@ -47,9 +76,9 @@ const Register = () => {
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicCheckbox">
-          <Form.Check type="checkbox" name='accept' label="Accept Terms and conditions" />
+          <Form.Check onClick={handleAccept} type="checkbox" name='accept' label={<>Accept <Link to='/terms'>Terms & Conditions</Link></>} />
         </Form.Group>
-        <Button variant="primary" type="submit">
+        <Button variant="primary" type="submit" disabled={!accepted}>
           Register
         </Button>
         <br />
