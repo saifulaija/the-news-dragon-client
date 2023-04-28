@@ -9,7 +9,8 @@ import {
   FaRegStar,
   FaStar,
 } from "react-icons/fa";
-import Rating from "react-rating";
+import { Rating } from '@smastrom/react-rating'
+import '@smastrom/react-rating/style.css'
 
 const NewsCard = ({ news }) => {
   const { title, _id, details, image_url, author, rating, total_view } = news;
@@ -45,14 +46,9 @@ const NewsCard = ({ news }) => {
         </Card.Text>
       </Card.Body>
       <Card.Footer className="text-muted d-flex">
-        <div className="flex-grow-1">
-          <Rating
-            placeholderRating={rating.number}
-            emptySymbol={<FaRegStar></FaRegStar>}
-            placeholderSymbol={<FaStar className="text-warning"></FaStar>}
-            fullSymbol={<FaStar></FaStar>}
-          ></Rating>
-          <span>{rating.number}</span>
+        <div className="flex-grow-1 d-flex align-items-center">
+        <Rating style={{ maxWidth: 100 }} value={rating} readOnly />
+          <span className="ms-2">{rating.number}</span>
         </div>
         <div>
           <FaEye></FaEye> {total_view}
